@@ -1,4 +1,14 @@
+
 package com.example.controller;
+
+import com.example.entity.AppUser;
+import com.example.service.UserService;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import lombok.RequiredArgsConstructor;
 
 import com.example.service.UserService;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -29,6 +39,11 @@ public class DemoController {
         Object name = token != null ? token.getPrincipal().getAttribute("name") : null;
         return "Authenticated as " + (name != null ? name : "Unknown") +
             " (" + (email != null ? email : "no email") + ")";
+    }
+
+    @PostMapping("/store-user")
+    public AppUser storeUser(OAuth2AuthenticationToken token) {
+        return userService.upsertFromOAuth(token);
     }
 }
 
